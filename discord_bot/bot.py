@@ -2,12 +2,12 @@
 import os
 from dotenv import load_dotenv
 import discord
-from database.database import sqlrequests
+from database.sqlsetup import sqlrequests
 from nxbt_bot.nxbt_controller import nxbt
 
 load_dotenv()  # Load environment variables from .env file
 TOKEN = os.getenv("TOKEN")
-BOT_CHANNEL_ID = 1347711549740941342
+BOT_CHANNEL_ID = os.getenv("BOT_CHANNEL_ID")
 
 
 class Client(discord.Client):
