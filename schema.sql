@@ -6,7 +6,7 @@ USE shiny_vault;
 CREATE TABLE IF NOT EXISTS Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     listing_id VARCHAR(50) NOT NULL,
-    ebay_username VARCHAR(255) UNIQUE NOT NULL,
+    ebay_username VARCHAR(255) NULL UNIQUE NOT NULL,
     sku VARCHAR(50) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
