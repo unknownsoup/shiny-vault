@@ -2,16 +2,6 @@
 CREATE DATABASE IF NOT EXISTS shiny_vault;
 USE shiny_vault;
 
--- Customers Table
-CREATE TABLE IF NOT EXISTS Customers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    ebay_user VARCHAR(255) UNIQUE NOT NULL,
-    discord_user VARCHAR(255) NULL DEFAULT NULL,
-    total_orders INT DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ebay_user) REFERENCES Orders(ebay_username)
-);
-
 -- Orders Table
 CREATE TABLE IF NOT EXISTS Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -38,4 +28,14 @@ CREATE TABLE IF NOT EXISTS Products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     listing_id VARCHAR(50) UNIQUE NOT NULL,
     storage_location VARCHAR(50) NOT NULL
+);
+
+-- Customers Table
+CREATE TABLE IF NOT EXISTS Customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ebay_user VARCHAR(255) UNIQUE NOT NULL,
+    discord_user VARCHAR(255) NULL DEFAULT NULL,
+    total_orders INT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ebay_user) REFERENCES Orders(ebay_username)
 );
