@@ -1,11 +1,11 @@
 # Main discord bot logic 
 import os
+import random
 from dotenv import load_dotenv
 import discord
 from discord import Permissions
-from discord import DMChannel
 from discord.ext import commands
-#from database.sqlsetup import sqlrequests
+from ..database import sqlrequests
 #from nxbt_bot.nxbt_controller import nxbt
 
 load_dotenv()  # Load environment variables from .env file
@@ -31,7 +31,7 @@ class Client(discord.Client):
 
         if message.content.startswith('hello'):
             print("Hello's !")
-            await message.channel.send('Hello!')
+            await message.channel.send("I am the keeper of the pokemon.")
 
         if message.channel.id == BOT_CHANNEL_ID:
             if message.content.startswith('!starttrade'):
@@ -58,10 +58,8 @@ class Client(discord.Client):
                 await channel.send(f"⚠️ {user.mention}, you already have an active trade thread!\nTo start your trade send that message in {trade_thread}")
                 return
 
-        print("creating private thread...\n")
-
         # Create a private thread
-        trade_thread = await channel.create_thread(name = 'Trade-{user}',
+        trade_thread = await channel.create_thread(name = f'Trade:{random.randint(1000, 9999)}',
                                                    message = None,
                                                    auto_archive_duration = 60, # Minutes 
                                                    type = None,
@@ -70,7 +68,7 @@ class Client(discord.Client):
                                                    slowmode_delay=None)
 
 
-        print(f"Trade Thread: {trade_thread}")
+        await channel.send(f"{user}: Your trade thread has been created!")
 
         # Store thread reference
         self.active_trades[user.id] = trade_thread.id
@@ -88,22 +86,22 @@ class Client(discord.Client):
         ebay_username = await self.wait_for("message", check=check_message)
 
         # grab all information from sql to give to the bot
-        #if sqlrequests.verify_ebay_username == True:
-        #    user_ebay = sqlrequests.get_order_ebay_username()
-        #    user_listing = sqlrequests.get_order_listingID()
-        #    user_item_location = sqlrequests.get_order_sku()
-        user_ebay = "Ebay Username"
-        user_listing = "Product Listing"
-        user_item_location = "001-050"
+        if sqlrequests.verify_ebay_username == True:
+            user_ebay = sqlrequests.get_order_ebay_username()
+            user_listing = sqlrequests.get_order_listingID()
+            user_item_location = sqlrequests.get_order_sku()
 
             # TODO save ebay username to customer database
-
+        
         # 2. Collect trade code
-        await trade_thread.send(f"I see your order, {ebay_username}. Thanks for ordering {user_listing}.\n"
-                                "Please provide the 8-digit trade code to commence trading, and have your junk pokemon ready.\n"
+        await trade_thread.send(f"Okay, I see you ordered {user_listing}.\n"
+                                "Please provide the 8-digit trade code to start trading, and have your junk pokemon ready.\n"
                                 "Format: XXXX-XXXX")
         trade_code = await self.wait_for("message", check=check_message)
-        trade_code = trade_code.strip().replace("-", "")
+
+        
+
+        # trade_code = trade_code.strip().replace("-", "")
 
         # 3. Do the damn trade
         #trade = nxbt.trade_sequence(tradecode=trade_code, pokemonlocation=user_item_location)
@@ -111,7 +109,7 @@ class Client(discord.Client):
         # TODO: Integrate with NXBT for trade execution
         # Simulating trade success
         if trade == True:
-            await trade_thread.send("Trade completed! Thank you for using Shiny Vault. ")
+            await trade_thread.send("Trade completed! Thank you for using Shiny Vault and remember to leave a review. ")
         
 
 # Intents tells the bot what its allowed to use
