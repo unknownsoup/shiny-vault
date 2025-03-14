@@ -2,12 +2,18 @@
 import os
 from dotenv import load_dotenv
 import discord
-from database.sqlsetup import sqlrequests
-from nxbt_bot.nxbt_controller import nxbt
+from discord import Permissions
+from discord import DMChannel
+from discord.ext import commands
+#from database.sqlsetup import sqlrequests
+#from nxbt_bot.nxbt_controller import nxbt
 
 load_dotenv()  # Load environment variables from .env file
 TOKEN = os.getenv("TOKEN")
-BOT_CHANNEL_ID = os.getenv("BOT_CHANNEL_ID")
+BOT_CHANNEL_ID = int(os.getenv("BOT_CHANNEL_ID"))
+
+# Permissions allow us to create new private threads where the trades occur 
+permissions = discord.Permissions(create_private_threads=True, manage_channels=True, create_instant_invite=True)
 
 
 class Client(discord.Client):
@@ -23,6 +29,10 @@ class Client(discord.Client):
         if message.author.bot:
             return  # if our bot send the same message, it will not reply to it. avoids an infinite loop
 
+        if message.content.startswith('hello'):
+            print("Hello's !")
+            await message.channel.send('Hello!')
+
         if message.channel.id == BOT_CHANNEL_ID:
             if message.content.startswith('!starttrade'):
                 await self.create_trade_channel(message)
@@ -34,6 +44,11 @@ class Client(discord.Client):
         user = message.author
         channel = message.channel
 
+
+        if not channel.permissions_for(message.guild.me).create_private_threads:
+            await message.channel.send("I don't have permission to create private threads in this channel.")
+            return
+        
         # Check if user already has an active trade thread
         if user.id in self.active_trades:
             trade_thread_id = self.active_trades[user.id]
@@ -43,11 +58,19 @@ class Client(discord.Client):
                 await channel.send(f"⚠️ {user.mention}, you already have an active trade thread!\nTo start your trade send that message in {trade_thread}")
                 return
 
+        print("creating private thread...\n")
+
         # Create a private thread
-        trade_thread = await channel.create_trade_channel(
-            name=f"Trade-{user.name}",
-            type=discord.ChannelType.private_thread
-        )
+        trade_thread = await channel.create_thread(name = 'Trade-{user}',
+                                                   message = None,
+                                                   auto_archive_duration = 60, # Minutes 
+                                                   type = None,
+                                                   reason = 'Creating trade channel for {user}. ', 
+                                                   invitable = False,
+                                                   slowmode_delay=None)
+
+
+        print(f"Trade Thread: {trade_thread}")
 
         # Store thread reference
         self.active_trades[user.id] = trade_thread.id
@@ -65,10 +88,13 @@ class Client(discord.Client):
         ebay_username = await self.wait_for("message", check=check_message)
 
         # grab all information from sql to give to the bot
-        if sqlrequests.verify_ebay_username == True:
-            user_ebay = sqlrequests.get_order_ebay_username()
-            user_listing = sqlrequests.get_order_listingID()
-            user_item_location = sqlrequests.get_order_sku()
+        #if sqlrequests.verify_ebay_username == True:
+        #    user_ebay = sqlrequests.get_order_ebay_username()
+        #    user_listing = sqlrequests.get_order_listingID()
+        #    user_item_location = sqlrequests.get_order_sku()
+        user_ebay = "Ebay Username"
+        user_listing = "Product Listing"
+        user_item_location = "001-050"
 
             # TODO save ebay username to customer database
 
@@ -80,7 +106,8 @@ class Client(discord.Client):
         trade_code = trade_code.strip().replace("-", "")
 
         # 3. Do the damn trade
-        trade = nxbt.trade_sequence(tradecode=trade_code, pokemonlocation=user_item_location)
+        #trade = nxbt.trade_sequence(tradecode=trade_code, pokemonlocation=user_item_location)
+        trade = True
         # TODO: Integrate with NXBT for trade execution
         # Simulating trade success
         if trade == True:
