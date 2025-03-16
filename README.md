@@ -40,7 +40,7 @@ SQLite / MySQL – Database for order tracking
 
 NXBT – Bluetooth-based Nintendo Switch interaction
 
-OpenCV / Tesseract OCR – Real-time trade confirmation detection
+OpenCV & Tesseract OCR – Real-time trade confirmation detection
 
 Discord API – Bot for trade coordination
 
