@@ -20,7 +20,15 @@ What started as an idea has evolved into a fully automated system, capable of pr
 
 ## Features
 
-Async-Powered Task Management – Ensures smooth handling of multiple operations without blocking execution. Database-Backed Order Processing – Stores and retrieves customer order details dynamically. Discord Bot Integration – Facilitates trade coordination with buyers in real-time. EBay API Integration - Populates new orders in the database and updates orders. NXBT Automation – Enables automated Pokémon trading using a modded Switch. Real-Time OCR Detection – Monitors the Nintendo Switch screen to confirm trade status. Scalability-Ready – Designed to support multiple Raspberry Pis for increased trade volume. Future Expansion – Plans for website integration and additional game marketplaces.
+Async-Powered Task Management – Ensures smooth handling of multiple operations without blocking execution. 
+Database-Backed Order Processing – Stores and retrieves customer order details dynamically. 
+Discord Bot Integration – Facilitates trade coordination with buyers in real-time. 
+EBay API Integration - Populates new orders in the database and updates orders. 
+NXBT Automation – Enables automated Pokémon trading using a modded Switch. 
+Real-Time OCR Detection – Monitors the Nintendo Switch screen to confirm trade status. 
+Scalability-Ready – Designed to support multiple Raspberry Pis for increased trade volume. 
+
+Future Expansion – Plans for website integration and additional game marketplaces.
 
 ## Technology Stack
 
