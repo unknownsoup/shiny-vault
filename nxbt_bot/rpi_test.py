@@ -25,19 +25,24 @@ adapters = nx.get_available_adapters()
 controller_idxs = []
 # Loop over all Bluetooth adapters and create
 # Switch Pro Controllers
-for i in range(0, len(adapters)):
-    index = nx.create_controller(
-        nxbt.PRO_CONTROLLER,
-        adapter_path=adapters[i],
-        colour_body=random_colour(),
-        colour_buttons=random_colour())
-    controller_idxs.append(index)
+try: 
+    for i in range(0, len(adapters)):
+        index = nx.create_controller(
+            nxbt.PRO_CONTROLLER,
+            adapter_path=adapters[i],
+            colour_body=random_colour(),
+            colour_buttons=random_colour())
+        controller_idxs.append(index)
 
-    # Select the last controller for input
-    controller_idx = controller_idxs[-1]
+        # Select the last controller for input
+        controller_index = controller_idxs[-1]
 
-    # Wait for the switch to connect to the controller
-    nx.wait_for_connection(controller_idx)
+        # Wait for the switch to connect to the controller
+        nx.wait_for_connection(controller_index)
+except Exception:
+    print(f"Error creating controller: {Exception}")
+else:
+    print("Controller created successfully")
 
 # Press the B button
 # press_buttons defaults to pressing a button for 0.1s and releasing for 0.1s
