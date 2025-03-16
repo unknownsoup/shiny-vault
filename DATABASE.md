@@ -18,13 +18,12 @@ Tracks Pokémon orders from eBay.
 | Column     | Type      | Description                 |
 |-----------|----------|-----------------------------|
 | order_id  | INTEGER  | Primary Key                 |
-| customer_id | INTEGER | Foreign Key -> Customers   |
+| customer_id | INTEGER | Customer   |
 | listing_id | TEXT    | Unique eBay Order Number    |
-| SKU       | TEXT     | location of the item in virtual db | 
 | ebay_username | TEXT | Stores eBay Username        |
+| SKU       | TEXT     | location of the item in virtual db | 
 | status    | ENUM     | pending, in_progress, completed, canceled |
 | created_at | TIMESTAMP | Order creation timestamp  |
-| updated_at | TIMESTAMP | Last updated timestamp    |
 
 
 ## Products Table

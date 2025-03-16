@@ -6,7 +6,7 @@ import discord
 from discord import Permissions
 from discord.ext import commands
 from ..database.sqlsetup import sqlrequests
-from ..nxbt_bot.nxbt_controller import nxbt
+from ..nxbt_bot.nxbt_demo import nxbt
 
 load_dotenv()  # Load environment variables from .env file
 TOKEN = os.getenv("TOKEN")
@@ -98,10 +98,9 @@ class Client(discord.Client):
             ebay_username = await self.wait_for("message", check=check_message)
         
         # grab all information from sql to give to the bot
-            if sqlrequests.verify_ebay_username == True:
-                user_ebay = sqlrequests.get_order_ebay_username()
-                user_listing = sqlrequests.get_order_listingID()
-                user_item_location = sqlrequests.get_order_sku()
+            if sqlrequests.verify_ebay_username(ebay_username) == True:
+                result = sqlrequests.order_info_for_bot(ebay_username)
+                userlisting, sku, 
                 break
             else:
                 await trade_thread.send("I'm not seeing your order. Please make sure the name you gave is correct."
@@ -131,7 +130,7 @@ class Client(discord.Client):
         3. Do the damn trade 
         """
         # TODO: Integrate with NXBT for trade execution
-        trade = nxbt.trade_sequence(tradecode=trade_code, pokemonlocation=user_item_location)
+        trade = nxbt.trade_sequence(tradecode=trade_code, pokemonlocation=sku)
 
         # Simulating trade success
         if trade == True:

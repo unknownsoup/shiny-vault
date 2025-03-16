@@ -34,21 +34,31 @@ class sqlrequests():
         return
 
     def verify_ebay_username(username):
-        # check if the username exists AND that the 
-        mycursor.execute(f"SELECT ebay_username"
-                         "FROM orders"
-                         "WHERE EXISTS"
-                         "(SELECT ebay_username FROM orders WHERE ebay_username = {username} AND status = pending")
+    # Check if the username exists and has a pending order
+      sql = """
+          SELECT ebay_username FROM orders 
+          WHERE ebay_username = %s AND status = 'pending'
+          """
+      
+      mycursor.execute(sql, (username,))
+      result = mycursor.fetchone()  # Fetch one result
 
-    def get_order_listingID():
-        # look in order table
-        return ""
-    
-    def get_order_ebay_username():
-        # look in order table
-        return ""
-    
-    def get_order_sku():
-        # use the 
-        return ""
+      if result:  # If a pending order exists
+          update_sql = """
+                        UPDATE orders 
+                        SET status = 'in_progress' 
+                        WHERE ebay_username = %s
+                        """
+          mycursor.execute(update_sql, (username,))
+
+          mydb.commit()  # Save changes to the database
+
+          return True  # Order was updated successfully
+      
+      return False  # No pending order found
+
+
+    def order_info_for_bot(username):
+       r = ("", "", "")
+       return r
     

@@ -1,2 +1,3 @@
-# The loop thats gonna hold this whole thing together baby 
+# The loop that holds this whole thing together baby. Thank the lord for asyncio.
+import asyncio
 
