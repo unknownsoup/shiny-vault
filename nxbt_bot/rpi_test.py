@@ -1,14 +1,27 @@
 # Handles trading errors and retries 
-import nxbt
+try: 
+    import nxbt
+except ImportError:
+    print("nxbt module not found.")
 
 # Start the NXBT service
-nx = nxbt.Nxbt()
-
+try: 
+    nx = nxbt.Nxbt()
+except Exception:
+    print("Failed to start NXBT service.")
+else:
+    print("NXBT service started.")
+    
 # Get a list of all previously connected Switches and pass it as a reconnect_address argument
 controller_index = nx.create_controller(
     nxbt.PRO_CONTROLLER,
     reconnect_address=nx.get_switch_addresses())
-nx.wait_for_connection(controller_index)
+try: 
+    nx.wait_for_connection(controller_index)
+except OSError:
+    print(f"Connection OSError: {OSError}")
+except Exception as e:
+    print(f"Connection Error: {e}")
 
 # Press the B button
 # press_buttons defaults to pressing a button for 0.1s and releasing for 0.1s
