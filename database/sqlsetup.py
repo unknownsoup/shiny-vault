@@ -1,6 +1,6 @@
 # SQL SET UP 
 import mysql.connector
-
+from ..ebay.ebay_api import EBay_Handler
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -27,12 +27,26 @@ class sqlrequests():
 
     mycursor = mydb.cursor()
 
-    # TODO FILL IN VALUES TO BE INSERTED, GRABBED FROM EBAY API 
+    # Create a new order in the database
     def create_new_order(): # listing_id, ebay_username, sku, price, created at, status
-        mycursor.execute("INSERT INTO orders (listing_id), (ebay_username), (sku), (price), (status)" 
-                         "VALUES ()")
+        
+        results = EBay_Handler.fetch_orders_from_ebay()
+
+        ebay_user = results[0]
+        lineitemid = results[1]
+        sku = results[2]
+        price = results[3]
+        status = "pending"
+
+        sql = """INSERT INTO orders (listing_id, ebay_username, sku, price, status) 
+                 VALUES (%s, %s, %s, %s, %s)"""
+        values = (lineitemid, ebay_user, sku, price, status)
+
+        mycursor.execute(sql, values)
+        mydb.commit()  # Commit changes to the database
         return
 
+    
     def verify_ebay_username(username):
     # Check if the username exists and has a pending order
       sql = """
