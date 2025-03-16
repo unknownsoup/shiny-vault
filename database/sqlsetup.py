@@ -11,7 +11,7 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-mycursor.execute("DESCRIBE orders")
+mycursor.execute("DESCRIBE tradequeue")
 
 for x in mycursor:
   print(x)

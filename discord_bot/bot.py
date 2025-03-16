@@ -100,13 +100,13 @@ class Client(discord.Client):
         # grab all information from sql to give to the bot
             if sqlrequests.verify_ebay_username(ebay_username) == True:
                 result = sqlrequests.order_info_for_bot(ebay_username)
-                userlisting, sku, 
+                user_listing, sku, ebay_username = result
                 break
             else:
                 await trade_thread.send("I'm not seeing your order. Please make sure the name you gave is correct."
                                         "If I'm making a mistake, please contact me on eBay or here in Discord.")
                 return
-
+        
         """"
         2. Collect trade code
         """
