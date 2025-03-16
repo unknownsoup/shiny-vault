@@ -1,17 +1,77 @@
-# The Shiny Vault
-This program processes and fufill orders for pokemon in Pokemon Scarlet and Violet via ebay api, SQL, a discord bot, and an emulated Nintendo Switch Pro Controller using NXBT via raspberry pi.
+# The Shiny Vault - Automated Pokémon Trading Bot
 
-First, the buyer makes an order on eBay and the order information is put in SQL. Then, if the buyer decides they want to use the trade bot, they join the discord and use "!starttrade" in the bot chat. The bot then gets the buyers eBay username (for verification) and in turn the bot grabs the product ID from the database: searching with the buyer's eBay username. The bot then prompts the buyer to provide their IGN and trade-code. If everything is provided correctly, the trade will execute and the order will be fulfilled. If not, then the bot communicates with the user in discord accordingly. 
+## Overview
 
+The Shiny Vault is an automated trading system designed to streamline in-game Pokémon transactions. Utilizing async-driven architecture, this bot seamlessly handles:
 
-# Future Plans
-- Create website to process orders with discord
-    - Pokemon trading section for people to post Pokemon trades
-    - Create Custom Pokemon 
-        - 1. Customer creates pokemon on website
-        - 2. Script using PKHeX.Core creates a Pokemon file (.pk8)
-        - 3. Save file transfeered to Modded Switch via FTP
-        - 4. Local trade from modded to non-modded switch (to avoid flags from Nintendo)
-        - 5. Alert buyer that pokemon are now avaliable to trade 
+Order extraction from eBay
 
-- Expand bot trading to Animal Crossing
+Database management for order tracking
+
+Discord bot integration for customer communication
+
+NXBT-powered Nintendo Switch interactions for automated trading
+
+Real-time OCR monitoring to detect trade confirmations and interruptions
+
+Scalability for multiple Raspberry Pis handling concurrent trades
+
+What started as an idea has evolved into a fully automated system, capable of processing trades efficiently and with minimal human intervention.
+
+## Features
+
+Async-Powered Task Management – Ensures smooth handling of multiple operations without blocking execution. 
+Database-Backed Order Processing – Stores and retrieves customer order details dynamically. 
+Discord Bot Integration – Facilitates trade coordination with buyers in real-time. 
+EBay API Integration - Populates new orders in the database and updates orders. 
+NXBT Automation – Enables automated Pokémon trading using a modded Switch. 
+Real-Time OCR Detection – Monitors the Nintendo Switch screen to confirm trade status. 
+Scalability-Ready – Designed to support multiple Raspberry Pis for increased trade volume. 
+
+Future Expansion – Plans for website integration and additional game marketplaces.
+
+## Technology Stack
+
+Python – Core logic and automation
+
+asyncio – Asynchronous task handling
+
+SQLite / MySQL – Database for order tracking
+
+NXBT – Bluetooth-based Nintendo Switch interaction
+
+OpenCV & Tesseract OCR – Real-time trade confirmation detection
+
+Discord API – Bot for trade coordination
+
+eBay API - Order handling
+
+Flask / FastAPI (Future) – Website integration
+
+## How It Works
+
+1. The eBay order handler extracts new transactions and logs them in the database.
+
+2. Buyer can join discord via link at purchase and start trade process with Discord bot.
+
+3. The NXBT trade handler initiates an in-game trade with the customer.
+
+4. The real-time OCR monitor checks for trade completion or disconnections.
+
+5. If issues arise, the bot queues retry actions or notifies the user.
+
+6. Once successful, the trade is marked as completed in the database.
+
+## Future Plans
+
+Custom Pokémon Builder – Auto-generating Pokémon based on customer specifications.
+
+Web-Based Dashboard – Order tracking and management UI.
+
+Multi-Game Expansion – Support for other titles like Animal Crossing item trading.
+
+Multi-Pi Scaling – Distributing order fulfillment across multiple Raspberry Pis. 
+
+## Contributing
+
+This project is constantly evolving! Contributions and suggestions are welcome. Feel free to submit a pull request or open an issue. The Shiny Vault isn’t just a bot—it’s a fully automated trading system, built to be efficient, scalable, and future-proof. 
