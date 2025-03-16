@@ -1,1 +1,5 @@
-# Database Schema (Orders, Customers)
+# Database structure
+
+
+
+

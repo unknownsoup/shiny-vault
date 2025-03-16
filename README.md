@@ -7,4 +7,11 @@ First, the buyer makes an order on eBay and the order information is put in SQL.
 # Future Plans
 - Create website to process orders with discord
     - Pokemon trading section for people to post Pokemon trades
+    - Create Custom Pokemon 
+        - 1. Customer creates pokemon on website
+        - 2. Script using PKHeX.Core creates a Pokemon file (.pk8)
+        - 3. Save file transfeered to Modded Switch via FTP
+        - 4. Local trade from modded to non-modded switch (to avoid flags from Nintendo)
+        - 5. Alert buyer that pokemon are now avaliable to trade 
+
 - Expand bot trading to Animal Crossing

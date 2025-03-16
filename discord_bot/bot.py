@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 import discord
 from discord import Permissions
 from discord.ext import commands
-from ..database import sqlrequests
-#from nxbt_bot.nxbt_controller import nxbt
+from ..database.sqlsetup import sqlrequests
+from ..nxbt_bot.nxbt_controller import nxbt
 
 load_dotenv()  # Load environment variables from .env file
 TOKEN = os.getenv("TOKEN")
@@ -21,10 +21,11 @@ class Client(discord.Client):
         super().__init__(intents=intents)
         self.active_trades = {}
 
+    # Logs in the terminal that the bot is logged in
     async def on_ready(self):
-        # prints in the terminal
         print(f"Logged on as {self.user}!")
 
+    # Runs when any message is sent
     async def on_message(self, message):
         if message.author.bot:
             return  # if our bot send the same message, it will not reply to it. avoids an infinite loop
@@ -33,14 +34,17 @@ class Client(discord.Client):
             print("Hello's !")
             await message.channel.send("I am the keeper of the pokemon.")
 
+        # Only responds in the 'trade' channel
         if message.channel.id == BOT_CHANNEL_ID:
             if message.content.startswith('!starttrade'):
-                await self.create_trade_channel(message)
+                await self.create_trade_thread(message)
 
         
 
-    async def create_trade_channel(self, message):
-        """Starts a private trade thread for the user."""
+
+    # Starts a private trade thread for the user
+    async def create_trade_thread(self, message):
+        # defining variables
         user = message.author
         channel = message.channel
 
@@ -67,46 +71,68 @@ class Client(discord.Client):
                                                    invitable = False,
                                                    slowmode_delay=None)
 
-
-        await channel.send(f"{user}: Your trade thread has been created!")
-
         # Store thread reference
         self.active_trades[user.id] = trade_thread.id
 
-
+        await channel.send(f"{user}: Your trade thread has been created!")
         await self.trade(trade_thread, user)
     
+
+
+
+    """ Handles the trade flow w/ the buyer. Collecting eBay username and the trade code."""
     async def trade(self, trade_thread, user):
-        """ Handles the trade flow w/ the buyer. Collecting eBay username and the trade code"""
+        
         def check_message(m):
             return ((m.channel == trade_thread) and (m.author == user))
         
-        # 1. Collect eBay user
-        await trade_thread.send("Please provide your **eBay username** for order verification:")
-        ebay_username = await self.wait_for("message", check=check_message)
+        # Hello message
+        await trade_thread.send("Lets start trading when you're ready!\n"
+                                "If at any ")
 
-        # grab all information from sql to give to the bot
-        if sqlrequests.verify_ebay_username == True:
-            user_ebay = sqlrequests.get_order_ebay_username()
-            user_listing = sqlrequests.get_order_listingID()
-            user_item_location = sqlrequests.get_order_sku()
-
-            # TODO save ebay username to customer database
+        """ 
+        1. Collect eBay user 
+        """
+        while True:
+            await trade_thread.send("Please provide your **eBay username** for order verification:")
+            ebay_username = await self.wait_for("message", check=check_message)
         
-        # 2. Collect trade code
-        await trade_thread.send(f"Okay, I see you ordered {user_listing}.\n"
+        # grab all information from sql to give to the bot
+            if sqlrequests.verify_ebay_username == True:
+                user_ebay = sqlrequests.get_order_ebay_username()
+                user_listing = sqlrequests.get_order_listingID()
+                user_item_location = sqlrequests.get_order_sku()
+                break
+            else:
+                await trade_thread.send("I'm not seeing your order. Please make sure the name you gave is correct."
+                                        "If I'm making a mistake, please contact me on eBay or here in Discord.")
+                return
+
+        """"
+        2. Collect trade code
+        """
+        while True:
+            await trade_thread.send(f"Okay, I see you ordered {user_listing}.\n"
                                 "Please provide the 8-digit trade code to start trading, and have your junk pokemon ready.\n"
                                 "Format: XXXX-XXXX")
-        trade_code = await self.wait_for("message", check=check_message)
-
+            trade_code = await self.wait_for("message", check=check_message)
+            
+            try:
+                str(trade_code)
+                if type(trade_code) == str:
+                    trade_code = trade_code.strip().replace("-", "")
+                    break
+            except Exception: 
+                print(f"Cant convert message to string: {Exception}")
+                await trade_thread.send("Not the right format, make sure you typed your code correctly. ")
         
-
-        # trade_code = trade_code.strip().replace("-", "")
-
-        # 3. Do the damn trade
-        #trade = nxbt.trade_sequence(tradecode=trade_code, pokemonlocation=user_item_location)
-        trade = True
+        
+        """ 
+        3. Do the damn trade 
+        """
         # TODO: Integrate with NXBT for trade execution
+        trade = nxbt.trade_sequence(tradecode=trade_code, pokemonlocation=user_item_location)
+
         # Simulating trade success
         if trade == True:
             await trade_thread.send("Trade completed! Thank you for using Shiny Vault and remember to leave a review. ")

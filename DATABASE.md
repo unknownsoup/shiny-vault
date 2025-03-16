@@ -20,8 +20,8 @@ Tracks Pokémon orders from eBay.
 | order_id  | INTEGER  | Primary Key                 |
 | customer_id | INTEGER | Foreign Key -> Customers   |
 | listing_id | TEXT    | Unique eBay Order Number    |
-| SKU       | TEXT     | Foreign Key -> Orders       | 
-| ebay_username | TEXT | Foreign Key-> Customers     |
+| SKU       | TEXT     | location of the item in virtual db | 
+| ebay_username | TEXT | Stores eBay Username        |
 | status    | ENUM     | pending, in_progress, completed, canceled |
 | created_at | TIMESTAMP | Order creation timestamp  |
 | updated_at | TIMESTAMP | Last updated timestamp    |
