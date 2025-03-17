@@ -1,53 +1,61 @@
 # Handles dynamic inputting of digits and selection of pokemon
-linkcode = "34858531"
+linkcode = "3047"
+
+# function to navigate the cursor
+def navigate(row, col):
+            if row < 0:
+                for i in range(abs(row)):
+                    print("Moving DOWN")
+            elif row > 0:
+                for i in range(row):
+                    print("Moving UP")
+
+            if col < 0:
+                for i in range(abs(col)):
+                    print("Moving RIGHT")
+            elif col > 0:
+                for i in range(col):
+                    print("Moving LEFT")
+
+
 def test_linkcode(linkcode):
 
-    pad1 = (0, 0)
-    pad2 = (0, 1)
-    pad3 = (0, 2)
-    pad4 = (1, 0)
-    pad5 = (1, 1)
-    pad6 = (1, 2)
-    pad7 = (2, 0)
-    pad8 = (2, 1)
-    pad9 = (2, 2)
-    pad0 = (3, 1)
+    pad_positions = {
+        "1": (0, 0), "2": (0, 1), "3": (0, 2),
+        "4": (1, 0), "5": (1, 1), "6": (1, 2),
+        "7": (2, 0), "8": (2, 1), "9": (2, 2),
+        "0": (3, 1)
+    }
     """
     Always adjust the row first, then the column
     UNLESS the next digit is 0, then just adjust the column first
     """
     cursor_loc = (0, 0)
-
     for digit in linkcode:
-        if digit == "1":
-            digit = pad1
-        elif digit == "2":
-            digit = pad2
-        elif digit == "3":
-            digit = pad3
-        elif digit == "4":
-            digit = pad4
-        elif digit == "5":
-            digit = pad5   
-        elif digit == "6":
-            digit = pad6
-        elif digit == "7":
-            digit = pad7
-        elif digit == "8":
-            digit = pad8
-        elif digit == "9":
-            digit = pad9
-        elif digit == "0":
-            digit = pad0
+        # get the target digit's position
+        target_digit = pad_positions[digit]
         # update linkcode to remove the working digit
         linkcode = linkcode[1:]
 
-        # how the cursor moves
-        result = tuple(a-b for a, b in zip(cursor_loc, digit))
+        # Special case for digit 0
+        #     Move the cursor to the column first, then the row
+        if digit == "0":
+            col = cursor_loc[1] - target_digit[1]
+            navigate(0, col)
+            row = cursor_loc[0] - target_digit[0]
+            navigate(row, 0)
+        else:
+            # finding exacltly how many rows and columns to move
+            row, col = tuple(a-b for a, b in zip(cursor_loc, target_digit))
+
+            # navigate the cursor
+            navigate(row, col)
 
         # set the current cursor location
-        cursor_loc = digit
-        print(f"Moving cursor to {cursor_loc} with result {result}")
+        cursor_loc = target_digit
+        
+        print(f"Moving to {cursor_loc}")
+    
 
 
 test_linkcode(linkcode)

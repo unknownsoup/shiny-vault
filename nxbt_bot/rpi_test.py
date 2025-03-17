@@ -136,31 +136,60 @@ def BOT_changegrip_to_setlinkcode():
     print("SUCCESS... now exiting")
 
 
-def BOT_link_code(linkcode):
-    """
-    1 2 3 
-    4 5 6
-    7 8 9
-      0
-    """
-    pad1 = (0, 0)
-    pad2 = (0, 1)
-    pad3 = (0, 2)
-    pad4 = (1, 0)
-    pad5 = (1, 1)
-    pad6 = (1, 2)
-    pad7 = (2, 0)
-    pad8 = (2, 1)
-    pad9 = (2, 2)
-    pad0 = (3, 1)
-    cursor_loc = (0, 0)
+def navigate(row, col):
+            if row < 0:
+                for i in range(abs(row)):
+                    directionDOWN()
+            elif row > 0:
+                for i in range(row):
+                    directionUP()
 
-    for i in linkcode:
-        digit = linkcode[0]
+            if col < 0:
+                for i in range(abs(col)):
+                    directionRIGHT()
+            elif col > 0:
+                for i in range(col):
+                    directionLEFT()
+
+
+def input_linkcode(linkcode):
+
+    pad_positions = {
+        "1": (0, 0), "2": (0, 1), "3": (0, 2),
+        "4": (1, 0), "5": (1, 1), "6": (1, 2),
+        "7": (2, 0), "8": (2, 1), "9": (2, 2),
+        "0": (3, 1)
+    }
+    """
+    Always adjust the row first, then the column
+    UNLESS the next digit is 0, then just adjust the column first
+    """
+    cursor_loc = (0, 0)
+    for digit in linkcode:
+        # get the target digit's position
+        target_digit = pad_positions[digit]
+        # update linkcode to remove the working digit
         linkcode = linkcode[1:]
 
-    
-    return
+        # Special case for digit 0
+        #     Move the cursor to the column first, then the row
+        if digit == "0":
+            col = cursor_loc[1] - target_digit[1]
+            navigate(0, col)
+            row = cursor_loc[0] - target_digit[0]
+            navigate(row, 0)
+        else:
+            # finding exacltly how many rows and columns to move
+            row, col = tuple(a-b for a, b in zip(cursor_loc, target_digit))
+
+            # navigate the cursor
+            navigate(row, col)
+            pressA()
+
+        # set the current cursor location
+        cursor_loc = target_digit
+        
+        print(f"Moving to {cursor_loc}")
     
 
 # Start the NXBT service
@@ -189,3 +218,4 @@ def init_nxbt():
 
 init_nxbt()
 BOT_changegrip_to_setlinkcode()
+input_linkcode("13913090") # example link code
