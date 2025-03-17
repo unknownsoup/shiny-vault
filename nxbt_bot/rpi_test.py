@@ -1,6 +1,5 @@
 # Handles trading errors and retries 
 import time
-from random import randint
 
 import nxbt
 from nxbt import PRO_CONTROLLER
@@ -111,11 +110,7 @@ def directionRIGHT():
     else:
         print("Pressed RIGHT button")
 
-
-def random_colour():
-    return [randint(0, 255),randint(0, 255),randint(0, 255),]
-
-def changegrip_to_setlinkcode():
+def BOT_changegrip_to_setlinkcode():
     pressB()
     pressB()
     directionUP()
@@ -141,42 +136,56 @@ def changegrip_to_setlinkcode():
     print("SUCCESS... now exiting")
 
 
-def link_code_digit(digit):
-    if digit == 1:
-        pressA()
-    if digit == 2:
-        directionRIGHT()
-        pressA()
-        directionLEFT()
-    if digit == 3:
-        directionRIGHT()
-        directionRIGHT()
-        pressA()
-        directionLEFT()
-        directionLEFT()
+def BOT_link_code(linkcode):
+    """
+    1 2 3 
+    4 5 6
+    7 8 9
+      0
+    """
+    pad1 = (0, 0)
+    pad2 = (0, 1)
+    pad3 = (0, 2)
+    pad4 = (1, 0)
+    pad5 = (1, 1)
+    pad6 = (1, 2)
+    pad7 = (2, 0)
+    pad8 = (2, 1)
+    pad9 = (2, 2)
+    pad0 = (3, 1)
+    cursor_loc = (0, 0)
+
+    for i in linkcode:
+        digit = linkcode[0]
+        linkcode = linkcode[1:]
+
+    
+    return
     
 
 # Start the NXBT service
-try: 
-    nx = nxbt.Nxbt()
-except Exception:
-    print(f"Error initializing Nxbt: {Exception}")
-else:
-    print("Nxbt initialized successfully")
+def init_nxbt():
+    try: 
+        nx = nxbt.Nxbt()
+    except Exception:
+        print(f"Error initializing Nxbt: {Exception}")
+    else:
+        print("Nxbt initialized successfully")
 
 
-try: 
-    index = nx.create_controller(PRO_CONTROLLER)
-except Exception:
-    print("Couldn't create controller")
-else:
-    print("Controller created!")
+    try: 
+        index = nx.create_controller(PRO_CONTROLLER)
+    except Exception:
+        print("Couldn't create controller")
+    else:
+        print("Controller created!")
 
-try: 
-    nx.wait_for_connection(index)
-except Exception:
-    print("Couldn't connect controller")
-else:
-    print("Controller connected!")
+    try: 
+        nx.wait_for_connection(index)
+    except Exception:
+        print("Couldn't connect controller")
+    else:
+        print("Controller connected!")
 
-changegrip_to_setlinkcode()
+init_nxbt()
+BOT_changegrip_to_setlinkcode()
