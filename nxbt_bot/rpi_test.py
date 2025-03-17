@@ -140,6 +140,22 @@ def changegrip_to_setlinkcode():
     pressA()
     print("SUCCESS... now exiting")
 
+
+def link_code_digit(digit):
+    if digit == 1:
+        pressA()
+    if digit == 2:
+        directionRIGHT()
+        pressA()
+        directionLEFT()
+    if digit == 3:
+        directionRIGHT()
+        directionRIGHT()
+        pressA()
+        directionLEFT()
+        directionLEFT()
+    
+
 # Start the NXBT service
 try: 
     nx = nxbt.Nxbt()
