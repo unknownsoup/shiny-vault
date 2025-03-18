@@ -219,14 +219,14 @@ else:
 try: 
     index = nx.create_controller(PRO_CONTROLLER)
 except Exception:
-    print("Couldn't create controller")
+    print(f"Couldn't create controller: {Exception}")
 else:
     print("Controller created!")
 
 try: 
     nx.wait_for_connection(index)
 except Exception:
-    print("Couldn't connect controller")
+    print(f"Couldn't connect controller: {Exception}")
 else:
     print("Controller connected!")
 
