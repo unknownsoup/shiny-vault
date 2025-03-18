@@ -58,7 +58,7 @@ def test_linkcode(linkcode):
     
 
 
-test_linkcode(linkcode)
+#test_linkcode(linkcode)
 
 
 # Creating the simulated database that's an exact copy of the Trading Switch's Boxes
@@ -79,12 +79,16 @@ for box in range(1, 33):  # 32 boxes
 start_id = 0
 end_in = 0
 
-def print_pokemon_range(start_id, end_id, db):
+def items_to_trade(start_id, end_id, db):
+    all_items = []
+    
     for id_num in range(start_id, end_id + 1):
         poke = db.get(id_num, None)
         if poke:
             status = "Available" if poke["present"] else "Traded"
             print(f"ID {id_num}: Box {poke['box']}, Row {poke['row']}, Col {poke['col']} - {status}")
+
+
 
 # Example: Print Pokémon IDs 40 to 50
 #print_pokemon_range(40, 50, pokemon_db)

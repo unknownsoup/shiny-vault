@@ -36,7 +36,7 @@ A              SET LINK CODE SCREEN
 
 """
 
-wait = 1
+wait = 0.8
 
 def pressA():
     try: 
@@ -47,6 +47,7 @@ def pressA():
     else:
         print("Pressed A button")
 
+
 def pressB():
     try: 
         nx.press_buttons(index, [nxbt.Buttons.B])
@@ -55,6 +56,7 @@ def pressB():
         print(f"Press Buttons Error: {Exception}")
     else:
         print("Pressed B button")
+
 
 def pressX():
     try: 
@@ -65,6 +67,7 @@ def pressX():
     else:
         print("Pressed X button")
 
+
 def pressY():
     try: 
         nx.press_buttons(index, [nxbt.Buttons.Y])
@@ -73,6 +76,7 @@ def pressY():
         print(f"Press Buttons Error: {Exception}")
     else:
         print("Pressed Y button")
+
 
 def directionUP():
     try: 
@@ -83,6 +87,7 @@ def directionUP():
     else:
         print("Pressed UP button")
 
+
 def directionDOWN():
     try: 
         nx.press_buttons(index, [nxbt.Buttons.DPAD_DOWN])
@@ -91,6 +96,7 @@ def directionDOWN():
         print(f"Press Buttons Error: {Exception}")
     else:
         print("Pressed DOWN button")
+
 
 def directionLEFT():
     try: 
@@ -101,6 +107,7 @@ def directionLEFT():
     else:
         print("Pressed LEFT button")
 
+
 def directionRIGHT():
     try: 
         nx.press_buttons(index, [nxbt.Buttons.DPAD_RIGHT])
@@ -109,6 +116,7 @@ def directionRIGHT():
         print(f"Press Buttons Error: {Exception}")
     else:
         print("Pressed RIGHT button")
+
 
 def BOT_changegrip_to_setlinkcode():
     pressB()
@@ -190,32 +198,40 @@ def input_linkcode(linkcode):
         cursor_loc = target_digit
         
         print(f"Moving to {cursor_loc}")
+
+
+
+def clear_old_tradecode():
+    for i in range(8):
+        pressB()
     
 
 # Start the NXBT service
-def init_nxbt():
-    try: 
-        nx = nxbt.Nxbt()
-    except Exception:
-        print(f"Error initializing Nxbt: {Exception}")
-    else:
-        print("Nxbt initialized successfully")
+
+try: 
+    nx = nxbt.Nxbt()
+except Exception:
+    print(f"Error initializing Nxbt: {Exception}")
+else:
+    print("Nxbt initialized successfully")
 
 
-    try: 
-        index = nx.create_controller(PRO_CONTROLLER)
-    except Exception:
-        print("Couldn't create controller")
-    else:
-        print("Controller created!")
+try: 
+    index = nx.create_controller(PRO_CONTROLLER)
+except Exception:
+    print("Couldn't create controller")
+else:
+    print("Controller created!")
 
-    try: 
-        nx.wait_for_connection(index)
-    except Exception:
-        print("Couldn't connect controller")
-    else:
-        print("Controller connected!")
+try: 
+    nx.wait_for_connection(index)
+except Exception:
+    print("Couldn't connect controller")
+else:
+    print("Controller connected!")
 
-init_nxbt()
+
+
 BOT_changegrip_to_setlinkcode()
+clear_old_tradecode()
 input_linkcode("13913090") # example link code
