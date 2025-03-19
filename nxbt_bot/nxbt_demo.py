@@ -1,6 +1,6 @@
 # Controls the Switch's trading process
-
-# Mocking the nxbt module for demonstration purposes
-class nxbt():
-    def trade_sequence(tradecode, pokemonlocation):
-        return "Trade Success"
+import nxbt
+# This prints the device paths for each available adapter.
+# If a controller is in use, an adapter will be removed from this list.
+nx = nxbt.Nxbt()
+print(nx.get_available_adapters)

@@ -217,7 +217,7 @@ else:
 
 
 try: 
-    index = nx.create_controller(PRO_CONTROLLER)
+    index = nx.create_controller(nxbt.PRO_CONTROLLER)
 except Exception:
     print(f"Couldn't create controller: {Exception}")
 else:
@@ -232,6 +232,6 @@ else:
 
 
 
+time.sleep(2)
 BOT_changegrip_to_setlinkcode()
-clear_old_tradecode()
 input_linkcode("13913090") # example link code
