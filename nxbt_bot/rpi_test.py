@@ -126,7 +126,7 @@ def BOT_changegrip_to_setlinkcode():
     directionLEFT()
     pressA()
     pressA()
-    time.sleep(23)
+    time.sleep(23) 
     pressA()
     time.sleep(30)
     pressX()
@@ -179,17 +179,29 @@ def input_linkcode(linkcode):
         # update linkcode to remove the working digit
         linkcode = linkcode[1:]
 
+        # finding exacltly how many rows and columns to move
+        row, col = tuple(a-b for a, b in zip(cursor_loc, target_digit))
+
         # Special case for digit 0
         #     Move the cursor to the column first, then the row
         if digit == "0":
-            col = cursor_loc[1] - target_digit[1]
-            navigate(0, col)
-            row = cursor_loc[0] - target_digit[0]
-            navigate(row, 0)
-        else:
-            # finding exacltly how many rows and columns to move
-            row, col = tuple(a-b for a, b in zip(cursor_loc, target_digit))
+            if col < 0:
+                for i in range(abs(col)):
+                    directionRIGHT()
+            elif col > 0:
+                for i in range(col):
+                    directionLEFT()
 
+            if row < 0:
+                for i in range(abs(row)):
+                    directionDOWN()
+            elif row > 0:
+                for i in range(row):
+                    directionUP()
+            
+            pressA()
+
+        else:
             # navigate the cursor
             navigate(row, col)
             pressA()
